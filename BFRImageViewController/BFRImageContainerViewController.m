@@ -356,7 +356,8 @@
     } else if (recognizer.state == UIGestureRecognizerStateChanged) {
         [self.imgAttatchment setAnchorPoint:[recognizer locationInView:self.scrollView]];
     } else if (recognizer.state == UIGestureRecognizerStateEnded) {
-        CGPoint location = [recognizer locationInView:self.scrollView];
+        CGRect slidingImageFrame = self.activeAssetView.frame;
+        CGPoint location = CGPointMake(CGRectGetMidX(slidingImageFrame), CGRectGetMidY(slidingImageFrame));
         CGRect closeTopThreshhold = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height * .35);
         CGRect closeBottomThreshhold = CGRectMake(0, self.view.bounds.size.height - closeTopThreshhold.size.height, self.view.bounds.size.width, self.view.bounds.size.height * .35);
         
