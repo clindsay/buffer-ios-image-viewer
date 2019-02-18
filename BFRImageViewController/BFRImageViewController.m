@@ -38,6 +38,8 @@
 /*! This creates the parallax scrolling effect by essentially clipping the scrolled images and moving with the touch point in scrollViewDidScroll. */
 @property (strong, nonatomic, nonnull) UIView *parallaxView;
 
+@property (strong, nonatomic, nullable) UIButton *deleteButton;
+
 @end
 
 @implementation BFRImageViewController
@@ -210,6 +212,14 @@
         [self.view addSubview:self.doneButton];
         [self.view bringSubviewToFront:self.doneButton];
         
+        self.deleteButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [self.deleteButton setTitle:NSLocalizedString(@"Delete", @"Button that will delete the currently viewed photo.") forState:UIControlStateNormal];
+        [self.deleteButton setTitleColor:[UIColor colorWithRed:1.0 green:0.22 blue:0.137 alpha:1.0] forState:UIControlStateNormal];
+        [self.deleteButton addTarget:self action:@selector(handleDeleteAction) forControlEvents:UIControlEventTouchUpInside];
+        
+        [self.view addSubview:self.deleteButton];
+        [self.view bringSubviewToFront:self.deleteButton];
+
         [self updateChromeFrames];
     }
 }
@@ -224,6 +234,13 @@
         }
         
         self.doneButton.frame = CGRectMake(buttonX, closeButtonY, 17, 17);
+        
+        [self.deleteButton sizeToFit];
+
+        CGFloat deleteButtonX = 20;
+        CGFloat deleteButtonY = CGRectGetMaxY( self.view.bounds ) - self.view.safeAreaInsets.bottom - self.deleteButton.bounds.size.height - 8;
+        
+        self.deleteButton.frame = CGRectMake(deleteButtonX, deleteButtonY, self.deleteButton.frame.size.width, self.deleteButton.frame.size.height);
     }
     
     self.parallaxView.hidden = YES;
@@ -332,6 +349,10 @@
 
 - (void)handleDoneAction {
     [self dismissWithCompletion:nil];
+}
+
+- (void)handleDeleteAction {
+    
 }
 
 /*! The images and scrollview are not part of this view controller, so instances of @c BFRimageContainerViewController will post notifications when they are touched for things to happen. */
