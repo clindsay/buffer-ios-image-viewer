@@ -352,7 +352,8 @@
 }
 
 - (void)handleDeleteAction {
-    
+    if ( [self.delegate respondsToSelector:@selector(imageViewController:didDeleteImageAtIndex:)] )
+        [self.delegate imageViewController: self didDeleteImageAtIndex:self.currentIndex];
 }
 
 /*! The images and scrollview are not part of this view controller, so instances of @c BFRimageContainerViewController will post notifications when they are touched for things to happen. */

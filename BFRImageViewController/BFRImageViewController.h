@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@class BFRImageViewController;
+
+@protocol BFRImageViewControllerDelegate <NSObject>
+
+- (void) imageViewController: (BFRImageViewController*) imageViewController didDeleteImageAtIndex: (NSInteger) index;
+
+@end
+
 @interface BFRImageViewController : UIViewController
 
 - (instancetype _Nullable)init NS_UNAVAILABLE;
@@ -20,6 +28,8 @@
 
 /*! Reinitialize with a new images array. Can be used to change the view controller's content on demand */
 - (void)setImageSource:(NSArray * _Nonnull)images;
+
+@property (nonatomic, weak) id<BFRImageViewControllerDelegate> delegate;
 
 /*! Assigning YES to this property will make the background transparent. Default is NO. */
 @property (nonatomic, getter=isUsingTransparentBackground) BOOL useTransparentBackground;
