@@ -352,8 +352,17 @@
 }
 
 - (void)handleDeleteAction {
+    NSMutableArray* newImagesArray = (NSMutableArray*) [self.images mutableCopy];
+    [newImagesArray removeObjectAtIndex:self.currentIndex];
+    
+    if ( newImagesArray.count > 0 )
+        [self setImageSource:newImagesArray];
+        
     if ( [self.delegate respondsToSelector:@selector(imageViewController:didDeleteImageAtIndex:)] )
         [self.delegate imageViewController: self didDeleteImageAtIndex:self.currentIndex];
+    
+    if ( newImagesArray.count == 0 )
+        [self dismissWithoutCustomAnimation];
 }
 
 /*! The images and scrollview are not part of this view controller, so instances of @c BFRimageContainerViewController will post notifications when they are touched for things to happen. */
