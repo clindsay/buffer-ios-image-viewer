@@ -352,17 +352,44 @@
 }
 
 - (void)handleDeleteAction {
-    NSMutableArray* newImagesArray = (NSMutableArray*) [self.images mutableCopy];
-    [newImagesArray removeObjectAtIndex:self.currentIndex];
+    BOOL isLastImage = self.images.count == 1;
+    if ( isLastImage )
+    {
+        [self handleDeleteLastImage];
+        return;
+    }
     
-    if ( newImagesArray.count > 0 )
-        [self setImageSource:newImagesArray];
-        
+    NSInteger previousStartingIndex = self.startingIndex;
+    NSInteger indexofDeletedImageBeforeDeletion = self.currentIndex;
+    NSInteger nextImageIndexBeforeDeletion = self.currentIndex == 0 ? self.currentIndex + 1 : self.currentIndex - 1;
+    NSInteger nextImageIndexAfterDeletion = self.currentIndex == 0 ? 0 : self.currentIndex - 1;
+    UIPageViewControllerNavigationDirection animationDirection = self.currentIndex == 0 ? UIPageViewControllerNavigationDirectionForward : UIPageViewControllerNavigationDirectionReverse;
+    
+    [self.pagerVC setViewControllers:@[self.imageViewControllers[nextImageIndexBeforeDeletion]]
+                           direction:animationDirection
+                            animated:YES
+                          completion:^(BOOL finished) {
+                              dispatch_async(dispatch_get_main_queue(), ^{
+                                NSMutableArray* newImagesArray = (NSMutableArray*) [self.images mutableCopy];
+                                [newImagesArray removeObjectAtIndex:indexofDeletedImageBeforeDeletion];
+
+                                // We set it to this temporarily so that the currently viewed image will be displayed first, but we still maintain the dismissal behavior for the correct starting image.
+                                self.startingIndex = nextImageIndexAfterDeletion;
+                                [self setImageSource:newImagesArray];
+                                self.startingIndex = previousStartingIndex;
+
+                                if ( [self.delegate respondsToSelector:@selector(imageViewController:didDeleteImageAtIndex:)] )
+                                    [self.delegate imageViewController: self didDeleteImageAtIndex:indexofDeletedImageBeforeDeletion];
+                              });
+                          }];
+}
+
+- (void)handleDeleteLastImage
+{
     if ( [self.delegate respondsToSelector:@selector(imageViewController:didDeleteImageAtIndex:)] )
         [self.delegate imageViewController: self didDeleteImageAtIndex:self.currentIndex];
     
-    if ( newImagesArray.count == 0 )
-        [self dismissWithoutCustomAnimation];
+    [self dismissWithoutCustomAnimation];
 }
 
 /*! The images and scrollview are not part of this view controller, so instances of @c BFRimageContainerViewController will post notifications when they are touched for things to happen. */
