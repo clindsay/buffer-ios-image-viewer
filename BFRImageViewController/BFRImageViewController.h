@@ -13,6 +13,7 @@
 @protocol BFRImageViewControllerDelegate <NSObject>
 
 - (void) imageViewController: (BFRImageViewController*) imageViewController didDeleteImageAtIndex: (NSInteger) index;
+- (void) imageViewController: (BFRImageViewController*) imageViewController didSetKeyPhotoToIndex: (NSInteger) index;
 
 @end
 

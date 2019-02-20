@@ -39,6 +39,7 @@
 @property (strong, nonatomic, nonnull) UIView *parallaxView;
 
 @property (strong, nonatomic, nullable) UIButton *deleteButton;
+@property (strong, nonatomic, nullable) UIButton *setKeyPhotoButton;
 
 @end
 
@@ -220,6 +221,13 @@
         [self.view addSubview:self.deleteButton];
         [self.view bringSubviewToFront:self.deleteButton];
 
+        self.setKeyPhotoButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [self.setKeyPhotoButton setTitle:NSLocalizedString(@"Set Key Photo", @"Button title that when tapped will select the current photo to be displayed on the dictionary entry.") forState:UIControlStateNormal];
+        [self.setKeyPhotoButton addTarget:self action:@selector(handleSetKeyPhoto) forControlEvents:UIControlEventTouchUpInside];
+        
+        [self.view addSubview:self.setKeyPhotoButton];
+        [self.view bringSubviewToFront:self.setKeyPhotoButton];
+
         [self updateChromeFrames];
     }
 }
@@ -236,11 +244,14 @@
         self.doneButton.frame = CGRectMake(buttonX, closeButtonY, 17, 17);
         
         [self.deleteButton sizeToFit];
-
         CGFloat deleteButtonX = 20;
         CGFloat deleteButtonY = CGRectGetMaxY( self.view.bounds ) - self.view.safeAreaInsets.bottom - self.deleteButton.bounds.size.height - 8;
-        
         self.deleteButton.frame = CGRectMake(deleteButtonX, deleteButtonY, self.deleteButton.frame.size.width, self.deleteButton.frame.size.height);
+        
+        [self.setKeyPhotoButton sizeToFit];
+        CGFloat setKeyPhotoButtonX = CGRectGetMaxX(self.view.bounds) - self.view.safeAreaInsets.right - self.setKeyPhotoButton.bounds.size.width - 20;
+        CGFloat setKeyPhotoBUttonY = deleteButtonY;
+        self.setKeyPhotoButton.frame = CGRectMake(setKeyPhotoButtonX, setKeyPhotoBUttonY, self.setKeyPhotoButton.frame.size.width, self.setKeyPhotoButton.frame.size.height);
     }
     
     self.parallaxView.hidden = YES;
@@ -410,6 +421,14 @@
         [self.delegate imageViewController: self didDeleteImageAtIndex:self.currentIndex];
     
     [self dismissWithoutCustomAnimation];
+}
+
+- (void)handleSetKeyPhoto
+{
+    self.startingIndex = self.currentIndex;
+
+    if ( [self.delegate respondsToSelector:@selector(imageViewController:didSetKeyPhotoToIndex:)] )
+        [self.delegate imageViewController: self didSetKeyPhotoToIndex:self.currentIndex];    
 }
 
 /*! The images and scrollview are not part of this view controller, so instances of @c BFRimageContainerViewController will post notifications when they are touched for things to happen. */
