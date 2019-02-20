@@ -365,23 +365,43 @@
     NSInteger nextImageIndexAfterDeletion = self.currentIndex == 0 ? 0 : self.currentIndex - 1;
     UIPageViewControllerNavigationDirection animationDirection = self.currentIndex == 0 ? UIPageViewControllerNavigationDirectionForward : UIPageViewControllerNavigationDirectionReverse;
     
-    [self.pagerVC setViewControllers:@[self.imageViewControllers[nextImageIndexBeforeDeletion]]
-                           direction:animationDirection
-                            animated:YES
-                          completion:^(BOOL finished) {
-                              dispatch_async(dispatch_get_main_queue(), ^{
-                                NSMutableArray* newImagesArray = (NSMutableArray*) [self.images mutableCopy];
-                                [newImagesArray removeObjectAtIndex:indexofDeletedImageBeforeDeletion];
+    [self animateDeletionOfCurrentPhotoWithCompletion:^(BOOL finished) {
+        [self.pagerVC setViewControllers:@[self.imageViewControllers[nextImageIndexBeforeDeletion]]
+                               direction:animationDirection
+                                animated:YES
+                              completion:^(BOOL finished) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                  NSMutableArray* newImagesArray = (NSMutableArray*) [self.images mutableCopy];
+                  [newImagesArray removeObjectAtIndex:indexofDeletedImageBeforeDeletion];
 
-                                // We set it to this temporarily so that the currently viewed image will be displayed first, but we still maintain the dismissal behavior for the correct starting image.
-                                self.startingIndex = nextImageIndexAfterDeletion;
-                                [self setImageSource:newImagesArray];
-                                self.startingIndex = previousStartingIndex;
+                  // We set it to this temporarily so that the currently viewed image will be displayed first, but we still maintain the dismissal behavior for the correct starting image.
+                  self.startingIndex = nextImageIndexAfterDeletion;
+                  [self setImageSource:newImagesArray];
+                  self.startingIndex = previousStartingIndex;
 
-                                if ( [self.delegate respondsToSelector:@selector(imageViewController:didDeleteImageAtIndex:)] )
-                                    [self.delegate imageViewController: self didDeleteImageAtIndex:indexofDeletedImageBeforeDeletion];
-                              });
-                          }];
+                  if ( [self.delegate respondsToSelector:@selector(imageViewController:didDeleteImageAtIndex:)] )
+                      [self.delegate imageViewController: self didDeleteImageAtIndex:indexofDeletedImageBeforeDeletion];
+            });
+        }];
+    }];
+}
+    
+
+- (void) animateDeletionOfCurrentPhotoWithCompletion:(void (^ __nullable)(BOOL finished))completion
+{
+    BFRImageContainerViewController* imageContainer = self.imageViewControllers[self.currentIndex];
+    UIView* view = imageContainer.view;
+    [UIView animateKeyframesWithDuration:0.25f delay:0.0f options:0 animations:^
+     {
+         [UIView addKeyframeWithRelativeStartTime:0.0 relativeDuration:1.0 animations:^
+          {
+              view.transform = CGAffineTransformMakeScale( 0.2f, 0.2f );
+          }];
+         [UIView addKeyframeWithRelativeStartTime:0.3 relativeDuration:0.7 animations:^
+          {
+              view.alpha = 0.0f;
+          }];
+     } completion:completion];
 }
 
 - (void)handleDeleteLastImage
