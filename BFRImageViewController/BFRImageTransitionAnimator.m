@@ -120,6 +120,7 @@
     self.animatedImageContainer.alpha = 0.0f;
     
     UIImageView *temporaryAnimatedImageView = [self temporaryImageView];
+    temporaryAnimatedImageView.layer.contentsRect = self.animatedImageContainer.layer.contentsRect;
     
     [animationContainerView addSubview:destinationView];
     [animationContainerView addSubview:temporaryAnimatedImageView];
@@ -128,6 +129,7 @@
     
     [UIView animateWithDuration:self.animationDuration delay:0.0f options:UIViewAnimationOptionCurveEaseOut animations:^ {
         temporaryAnimatedImageView.frame = animatedImageViewDestination;
+        temporaryAnimatedImageView.layer.contentsRect = CGRectMake(0, 0, 1, 1);
         destinationView.alpha = 1.0f;
     } completion:^ (BOOL done) {
         [transitionContext completeTransition:YES];
@@ -173,6 +175,7 @@
     [UIView animateWithDuration:self.animationDuration delay:0.0f options:UIViewAnimationOptionCurveEaseIn animations:^ {
         if (self.shouldDismissWithoutCustomTransition == NO) {
             temporaryAnimatedImageView.frame = self.imageOriginFrame;
+            temporaryAnimatedImageView.layer.contentsRect = self.animatedImageContainer.layer.contentsRect;
         }
         destinationView.alpha = 1.0f;
     } completion:^ (BOOL done) {
