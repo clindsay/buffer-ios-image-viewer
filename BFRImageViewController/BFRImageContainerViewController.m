@@ -139,7 +139,8 @@
     float topOffset = ( self.view.bounds.size.height - newHeight) / 2;
     
     // Reposition image view
-    CGRect newRect = CGRectMake(leftOffset, topOffset, newWidth, newHeight);
+    CGFloat zoomScale = self.scrollView.zoomScale;
+    CGRect newRect = CGRectMake(leftOffset * zoomScale, topOffset * zoomScale, newWidth * zoomScale, newHeight * zoomScale);
 
     // Check for any NaNs, which should get corrected in the next drawing cycle
     BOOL isInvalidRect = (isnan(leftOffset) || isnan(topOffset) || isnan(newWidth) || isnan(newHeight));
