@@ -133,6 +133,20 @@
     return ((BFRImageContainerViewController *)self.pagerVC.viewControllers.firstObject).pageIndex;
 }
 
+- (void) setMaximumZoomScale:(CGFloat)maximumZoomScale
+{
+    _maximumZoomScale = maximumZoomScale;
+    for (BFRImageContainerViewController* imageViewController in self.imageViewControllers) {
+        imageViewController.maximumZoomScale = maximumZoomScale;
+    }
+}
+
+- (void) setCurrentZoomScale: (CGFloat) zoomScale andScrollViewOffset: (CGPoint) scrollViewOffset
+{
+    BFRImageContainerViewController* imageViewController = self.imageViewControllers[self.currentIndex];
+    [imageViewController setCurrentZoomScale:zoomScale andScrollViewOffset:scrollViewOffset];    
+}
+
 #pragma mark - Chrome/UI
 
 - (void)reinitializeUI {
@@ -188,6 +202,7 @@
         imgVC.disableSharingLongPress = self.shouldDisableSharingLongPress;
         imgVC.disableHorizontalDrag = (self.images.count > 1);
         imgVC.disableAutoplayForLivePhoto = self.shouldDisableAutoplayForLivePhoto;
+        imgVC.maximumZoomScale = self.maximumZoomScale;
         [self.imageViewControllers addObject:imgVC];
     }
     

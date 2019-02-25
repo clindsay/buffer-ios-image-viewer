@@ -301,9 +301,23 @@
     }
     
     // Apply zoom
-    self.scrollView.maximumZoomScale = maxScale;
+    self.scrollView.maximumZoomScale = self.maximumZoomScale != 0 ? self.maximumZoomScale : maxScale;
     self.scrollView.minimumZoomScale = minScale;
     self.scrollView.zoomScale = minScale;
+}
+
+- (void) setMaximumZoomScale:(CGFloat)maximumZoomScale
+{
+    _maximumZoomScale = maximumZoomScale;
+    if ( self.scrollView != nil ) {
+        self.scrollView.maximumZoomScale = maximumZoomScale;
+    }
+}
+
+- (void) setCurrentZoomScale: (CGFloat) zoomScale andScrollViewOffset: (CGPoint) scrollViewOffset
+{
+    self.scrollView.zoomScale = zoomScale;
+    self.scrollView.contentOffset = scrollViewOffset;
 }
 
 /*! Called during zooming of the image to ensure it stays centered */

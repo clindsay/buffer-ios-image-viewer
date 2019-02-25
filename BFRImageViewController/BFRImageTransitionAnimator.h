@@ -28,4 +28,6 @@ static const CGFloat DEFAULT_ANIMATION_DURATION = 0.23f;
 /*! The duration of the animation for the custom transition. By default, this is set to DEFAULT_ANIMATION_DURATION. */
 @property (nonatomic) CGFloat animationDuration;
 
+@property (atomic, readwrite) CGRect imageDestinationContentsRect;
+
 @end

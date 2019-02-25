@@ -53,6 +53,10 @@
 /*! Allows you to enable autoplay for peek&play feature on photo live view. Default to YES */
 @property (nonatomic, getter=shouldDisableAutoplayForLivePhoto) BOOL disableAutoplayForLivePhoto;
 
+@property (nonatomic, assign) CGFloat maximumZoomScale;
+
+- (void) setCurrentZoomScale: (CGFloat) zoomScale andScrollViewOffset: (CGPoint) scrollViewOffset;
+
 /*! Dismiss properly with animations */
 - (void)dismiss;
 

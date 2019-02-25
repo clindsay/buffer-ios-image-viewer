@@ -37,6 +37,7 @@
         self.desiredContentMode = UIViewContentModeScaleAspectFill;
         self.animationDuration = DEFAULT_ANIMATION_DURATION;
         self.dismissWithoutCustomTransition = NO;
+        self.imageDestinationContentsRect = CGRectMake(0, 0, 1, 1);
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleCancelCustomTransitionNotification:) name:NOTE_VC_SHOULD_CANCEL_CUSTOM_TRANSITION object:nil];
     }
     
@@ -129,7 +130,7 @@
     
     [UIView animateWithDuration:self.animationDuration delay:0.0f options:UIViewAnimationOptionCurveEaseOut animations:^ {
         temporaryAnimatedImageView.frame = animatedImageViewDestination;
-        temporaryAnimatedImageView.layer.contentsRect = CGRectMake(0, 0, 1, 1);
+        temporaryAnimatedImageView.layer.contentsRect = self.imageDestinationContentsRect;
         destinationView.alpha = 1.0f;
     } completion:^ (BOOL done) {
         [transitionContext completeTransition:YES];
@@ -161,6 +162,7 @@
     // Hide the first image from showing during the animation, and the original image
     fromView.subviews.firstObject.hidden = YES;
     UIImageView *temporaryAnimatedImageView = [self temporaryImageView];
+    temporaryAnimatedImageView.layer.contentsRect = self.imageDestinationContentsRect;
     
     [animationContainerView addSubview:destinationView];
     
