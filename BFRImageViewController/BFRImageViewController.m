@@ -417,10 +417,14 @@
 
 - (void)handleDeleteLastImage
 {
-    if ( [self.delegate respondsToSelector:@selector(imageViewController:didDeleteImageAtIndex:)] )
-        [self.delegate imageViewController: self didDeleteImageAtIndex:self.currentIndex];
+    NSUInteger currentIndex = self.currentIndex;
     
-    [self dismissWithoutCustomAnimation];
+    [self animateDeletionOfCurrentPhotoWithCompletion:^(BOOL finished) {
+        if ( [self.delegate respondsToSelector:@selector(imageViewController:didDeleteImageAtIndex:)] )
+            [self.delegate imageViewController: self didDeleteImageAtIndex:currentIndex];
+        
+        [self dismissWithoutCustomAnimation];
+    }];
 }
 
 - (void)handleSetKeyPhoto
