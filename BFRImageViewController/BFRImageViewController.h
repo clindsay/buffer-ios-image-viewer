@@ -55,7 +55,8 @@
 
 @property (nonatomic, assign) CGFloat maximumZoomScale;
 
-- (void) setCurrentZoomScale: (CGFloat) zoomScale andScrollViewOffset: (CGPoint) scrollViewOffset;
+@property (nonatomic, assign) CGFloat zoomScale;
+@property (nonatomic, assign) CGPoint scrollViewOffset;
 
 /*! Dismiss properly with animations */
 - (void)dismiss;

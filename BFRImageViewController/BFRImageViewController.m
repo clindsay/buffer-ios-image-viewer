@@ -141,10 +141,28 @@
     }
 }
 
-- (void) setCurrentZoomScale: (CGFloat) zoomScale andScrollViewOffset: (CGPoint) scrollViewOffset
+- (void) setZoomScale: (CGFloat) zoomScale
 {
     BFRImageContainerViewController* imageViewController = self.imageViewControllers[self.currentIndex];
-    [imageViewController setCurrentZoomScale:zoomScale andScrollViewOffset:scrollViewOffset];    
+    [imageViewController setZoomScale:zoomScale];
+}
+
+- (CGFloat) zoomScale
+{
+    BFRImageContainerViewController* imageViewController = self.imageViewControllers[self.currentIndex];
+    return imageViewController.zoomScale;
+}
+
+- (CGPoint) scrollViewOffset
+{
+    BFRImageContainerViewController* imageViewController = self.imageViewControllers[self.currentIndex];
+    return imageViewController.scrollViewOffset;
+}
+
+- (void) setScrollViewOffset:(CGPoint)scrollViewOffset
+{
+    BFRImageContainerViewController* imageViewController = self.imageViewControllers[self.currentIndex];
+    [imageViewController setScrollViewOffset:scrollViewOffset];
 }
 
 #pragma mark - Chrome/UI

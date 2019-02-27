@@ -45,6 +45,7 @@ typedef NS_ENUM(NSUInteger, BFRImageAssetType) {
 
 @property (nonatomic, assign) CGFloat maximumZoomScale;
 
-- (void) setCurrentZoomScale: (CGFloat) zoomScale andScrollViewOffset: (CGPoint) scrollViewOffset;
+@property (nonatomic, assign) CGFloat zoomScale;
+@property (nonatomic, assign) CGPoint scrollViewOffset;
 
 @end

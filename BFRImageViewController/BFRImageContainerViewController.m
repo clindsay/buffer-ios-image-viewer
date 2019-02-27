@@ -314,10 +314,24 @@
     }
 }
 
-- (void) setCurrentZoomScale: (CGFloat) zoomScale andScrollViewOffset: (CGPoint) scrollViewOffset
+- (void) setZoomScale: (CGFloat) zoomScale
 {
     self.scrollView.zoomScale = zoomScale;
+}
+
+- (CGFloat) zoomScale
+{
+    return self.scrollView.zoomScale;
+}
+
+- (void) setScrollViewOffset:(CGPoint)scrollViewOffset
+{
     self.scrollView.contentOffset = scrollViewOffset;
+}
+
+- (CGPoint) scrollViewOffset
+{
+    return self.scrollView.contentOffset;
 }
 
 /*! Called during zooming of the image to ensure it stays centered */
